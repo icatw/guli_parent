@@ -79,10 +79,7 @@ public class EduTeacherController {
             @ApiParam(name = "id", value = "讲师ID", required = true)
             @PathVariable String id) {
         boolean flag = teacherService.removeById(id);
-        if (flag) {
-            return R.ok();
-        }
-        return R.error();
+        return flag ? R.ok() : R.error();
     }
 
     @ApiOperation(value = "新增讲师")
@@ -96,24 +93,22 @@ public class EduTeacherController {
 
 
     @ApiOperation(value = "根据ID查询讲师")
-    @GetMapping("{id}")
-    public R getById(
+    @GetMapping("getTeacher/{id}")
+    public R getTeacher(
             @ApiParam(name = "id", value = "讲师ID", required = true)
             @PathVariable String id) {
         EduTeacher teacher = teacherService.getById(id);
-        return R.ok().data("item", teacher);
+        return R.ok().data("teacher", teacher);
     }
 
     @ApiOperation(value = "根据ID修改讲师")
-    @PutMapping("{id}")
-    public R updateById(
-            @ApiParam(name = "id", value = "讲师ID", required = true)
-            @PathVariable String id,
+    @PostMapping("updateTeacher")
+    public R updateTeacher(
             @ApiParam(name = "teacher", value = "讲师对象", required = true)
             @RequestBody EduTeacher teacher) {
-        teacher.setId(id);
-        teacherService.updateById(teacher);
-        return R.ok();
+        boolean flag = teacherService.updateById(teacher);
+
+        return flag ? R.ok() : R.error();
     }
 }
 
