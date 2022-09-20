@@ -1,6 +1,8 @@
 package cn.icatw.eduservice.service;
 
 import cn.icatw.eduservice.entity.EduTeacher;
+import cn.icatw.eduservice.entity.vo.TeacherQuery;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface EduTeacherService extends IService<EduTeacher> {
 
+    /**
+     * 分页条件查询
+     *
+     * @param pageParam    页面参数
+     * @param teacherQuery 老师查询
+     */
+    void pageQuery(Page<EduTeacher> pageParam, TeacherQuery teacherQuery);
 }

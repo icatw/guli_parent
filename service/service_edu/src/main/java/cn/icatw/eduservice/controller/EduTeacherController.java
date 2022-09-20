@@ -3,6 +3,7 @@ package cn.icatw.eduservice.controller;
 
 import cn.icatw.commonutils.R;
 import cn.icatw.eduservice.entity.EduTeacher;
+import cn.icatw.eduservice.entity.vo.TeacherQuery;
 import cn.icatw.eduservice.service.EduTeacherService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -39,6 +40,26 @@ public class EduTeacherController {
             @PathVariable Long limit) {
         Page<EduTeacher> pageParam = new Page<>(current, limit);
         teacherService.page(pageParam, null);
+        List<EduTeacher> records = pageParam.getRecords();
+        long total = pageParam.getTotal();
+        return R.ok().data("total", total).data("rows", records);
+    }
+
+    /**
+     * 分页条件查询
+     *
+     * @param current 当前
+     * @param limit   限制
+     * @return {@link R}
+     */
+    @ApiOperation(value = "分页条件查询")
+    @PostMapping("pageTeacherCondition/{current}/{limit}")
+    public R pageTeacherCondition(@PathVariable long current,
+                                  @PathVariable long limit,
+                                  @RequestBody(required = false) TeacherQuery teacherQuery) {
+        //    创建page对象
+        Page<EduTeacher> pageParam = new Page<>(current, limit);
+        teacherService.pageQuery(pageParam, teacherQuery);
         List<EduTeacher> records = pageParam.getRecords();
         long total = pageParam.getTotal();
         return R.ok().data("total", total).data("rows", records);
