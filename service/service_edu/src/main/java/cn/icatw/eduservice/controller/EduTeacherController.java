@@ -31,18 +31,18 @@ public class EduTeacherController {
     //1. 查询讲师表的所有数据
 
     @ApiOperation(value = "分页讲师列表")
-    @GetMapping("pageTeacher/{page}/{limit}")
+    @GetMapping("pageTeacher/{current}/{limit}")
     public R pageList(
             @ApiParam(name = "page", value = "当前页码", required = true)
-            @PathVariable Long page,
+            @PathVariable Long current,
             @ApiParam(name = "limit", value = "每页记录数", required = true)
-            @PathVariable Long limit){
-        Page<EduTeacher> pageParam = new Page<>(page, limit);
+            @PathVariable Long limit) {
+        Page<EduTeacher> pageParam = new Page<>(current, limit);
+        teacherService.page(pageParam, null);
         List<EduTeacher> records = pageParam.getRecords();
         long total = pageParam.getTotal();
         return R.ok().data("total", total).data("rows", records);
     }
-
 
 
     @ApiOperation(value = "所有讲师列表")
