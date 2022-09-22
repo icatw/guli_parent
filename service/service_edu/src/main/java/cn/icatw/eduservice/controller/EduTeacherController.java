@@ -25,6 +25,7 @@ import java.util.List;
 @Api(tags = "讲师管理")
 @RestController
 @RequestMapping("/admin/edu/teacher")
+@CrossOrigin
 public class EduTeacherController {
 
     @Autowired
@@ -102,7 +103,7 @@ public class EduTeacherController {
     }
 
     @ApiOperation(value = "根据ID修改讲师")
-    @PostMapping("updateTeacher")
+    @PutMapping("updateTeacher")
     public R updateTeacher(
             @ApiParam(name = "teacher", value = "讲师对象", required = true)
             @RequestBody EduTeacher teacher) {

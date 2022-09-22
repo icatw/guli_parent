@@ -36,7 +36,7 @@ public class EduTeacherServiceImpl extends ServiceImpl<EduTeacherMapper, EduTeac
         if (!StringUtils.isEmpty(name)) {
             queryWrapper.like("name", name);
         }
-        if (!StringUtils.isEmpty(level.toString())) {
+        if (!StringUtils.isEmpty(level)) {
             queryWrapper.eq("level", level);
         }
         if (!StringUtils.isEmpty(begin)) {
