@@ -10,6 +10,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import java.util.Map;
 
+/**
+ * 主题excel侦听器
+ *
+ * @author 76218
+ * @date 2022/09/25
+ */
 public class SubjectExcelListener extends AnalysisEventListener<ExcelSubjectData> {
     public EduSubjectService subjectService;
 
@@ -27,7 +33,7 @@ public class SubjectExcelListener extends AnalysisEventListener<ExcelSubjectData
         if (user == null) {
             throw new GuliException(20001, "添加失败");
         }
-//添加一级分类
+        //添加一级分类
         EduSubject existOneSubject =
                 this.existOneSubject(subjectService, user.getOneSubjectName());
         if (existOneSubject == null) {//没有相同的
@@ -36,9 +42,9 @@ public class SubjectExcelListener extends AnalysisEventListener<ExcelSubjectData
             existOneSubject.setParentId("0");
             subjectService.save(existOneSubject);
         }
-//获取一级分类id值
+        //获取一级分类id值
         String pid = existOneSubject.getId();
-//添加二级分类
+        //添加二级分类
         EduSubject existTwoSubject =
                 this.existTwoSubject(subjectService, user.getTwoSubjectName(), pid);
         if (existTwoSubject == null) {
@@ -61,14 +67,13 @@ public class SubjectExcelListener extends AnalysisEventListener<ExcelSubjectData
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
     }
 
-    //判断一级分类是否重复
+    //判断二级分类是否重复
     private EduSubject existTwoSubject(EduSubjectService subjectService, String
             name, String pid) {
         QueryWrapper<EduSubject> wrapper = new QueryWrapper<>();
         wrapper.eq("title", name);
         wrapper.eq("parent_id", pid);
-        EduSubject eduSubject = subjectService.getOne(wrapper);
-        return eduSubject;
+        return subjectService.getOne(wrapper);
     }
 
     //判断一级分类是否重复
@@ -77,7 +82,6 @@ public class SubjectExcelListener extends AnalysisEventListener<ExcelSubjectData
         QueryWrapper<EduSubject> wrapper = new QueryWrapper<>();
         wrapper.eq("title", name);
         wrapper.eq("parent_id", "0");
-        EduSubject eduSubject = subjectService.getOne(wrapper);
-        return eduSubject;
+        return subjectService.getOne(wrapper);
     }
 }

@@ -18,6 +18,7 @@ import org.junit.Test;
  * @apiNote
  */
 public class CodeGenerator {
+
     @Test
     public void main1() {
 // 1、创建代码生成器
