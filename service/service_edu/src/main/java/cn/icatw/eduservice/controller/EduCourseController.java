@@ -26,7 +26,12 @@ public class EduCourseController {
     @Autowired
     private EduCourseService courseService;
 
-    //添加课程基本信息
+    /**
+     * 添加课程信息
+     *
+     * @param courseInfoVo 课程信息签证官
+     * @return {@link R}
+     */
     @ApiOperation(value = "新增课程")
     @PostMapping("/addCourseInfo")
     public R addCourseInfo(@RequestBody CourseInfoVo courseInfoVo) {

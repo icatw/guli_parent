@@ -49,13 +49,14 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         //1.获取所有1级分类（pid为0），得到1级分类的id和title（用于设置进oneSub）
         //2.根据1级分类id查找2级分类设置进twoSub
         ArrayList<OneSubject> oneSubjects = new ArrayList<>();
-        ArrayList<TwoSubject> twoSubjects = new ArrayList<>();
         oneSubjectList.forEach(oneSub -> {
+            ArrayList<TwoSubject> twoSubjects = new ArrayList<>();
             OneSubject oneSubject = new OneSubject();
             BeanUtils.copyProperties(oneSub, oneSubject);
             String pId = oneSub.getId();
             QueryWrapper<EduSubject> twoSubQueryWrapper = new QueryWrapper<>();
             twoSubQueryWrapper.eq("parent_id", pId);
+            //查找二级分类
             List<EduSubject> twoSubList = this.list(twoSubQueryWrapper);
             twoSubList.forEach(twoSubject -> {
                 TwoSubject twoSub = new TwoSubject();

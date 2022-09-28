@@ -34,6 +34,9 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         //将courseInfoVo对象转化成eduCourse对象
         EduCourse eduCourse = new EduCourse();
         BeanUtils.copyProperties(courseInfoVo, eduCourse);
+        String[] subjectIds = courseInfoVo.getSubjectIds();
+        eduCourse.setSubjectParentId(subjectIds[0]);
+        eduCourse.setSubjectId(subjectIds[1]);
         int insert = baseMapper.insert(eduCourse);
         if (insert == 0) {
             //添加失败
