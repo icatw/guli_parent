@@ -56,7 +56,6 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         if (!resultDescription) {
             throw new GuliException(20001, "课程详情信息保存失败");
         }
-
         return cid;
     }
 
@@ -66,6 +65,10 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         EduCourse eduCourse = baseMapper.selectById(courseId);
         CourseInfoVo courseInfoVo = new CourseInfoVo();
         BeanUtils.copyProperties(eduCourse, courseInfoVo);
+        String[] strings = new String[2];
+        strings[0]=eduCourse.getSubjectParentId();
+        strings[1]=eduCourse.getSubjectId();
+        courseInfoVo.setSubjectIds(strings);
         //查询描述表
         EduCourseDescription courseDescription = courseDescriptionService.getById(courseId);
         BeanUtils.copyProperties(courseDescription, courseInfoVo);
