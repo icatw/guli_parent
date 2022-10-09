@@ -57,7 +57,7 @@ public class EduChapterController {
     //修改章节
     @ApiOperation(value = "根据ID修改章节")
     @ApiParam(name = "eduChapter", value = "章节对象", required = true)
-    @GetMapping("updateChapter")
+    @PostMapping("updateChapter")
     public R updateChapter(@RequestBody EduChapter eduChapter) {
         chapterService.updateById(eduChapter);
         return R.ok();
