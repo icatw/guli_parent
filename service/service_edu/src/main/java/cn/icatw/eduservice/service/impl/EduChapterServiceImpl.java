@@ -1,5 +1,6 @@
 package cn.icatw.eduservice.service.impl;
 
+import cn.icatw.baseservice.exception.GuliException;
 import cn.icatw.eduservice.entity.EduChapter;
 import cn.icatw.eduservice.entity.EduVideo;
 import cn.icatw.eduservice.entity.chapter.ChapterVo;
@@ -44,11 +45,10 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         chapterList.forEach(chapter -> {
             //复制bean属性
             ChapterVo chapterVo = new ChapterVo();
-            BeanUtils.copyProperties(chapter,chapterVo);
-
+            BeanUtils.copyProperties(chapter, chapterVo);
             String chapterId = chapter.getId();
             QueryWrapper<EduVideo> videoQueryWrapper = new QueryWrapper<>();
-            videoQueryWrapper.eq("chapter_id", chapterId).eq("course_id",courseId);
+            videoQueryWrapper.eq("chapter_id", chapterId).eq("course_id", courseId);
             List<EduVideo> videoList = eduVideoService.list(videoQueryWrapper);
             List<VideoVo> videoVoList = videoList.stream().map(video -> {
                 VideoVo videoVo = new VideoVo();
@@ -60,4 +60,22 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         });
         return chapterVos;
     }
+
+    //删除章节
+    @Override
+    public boolean deleteChapter(String chapterId) {
+        //根据chapterId章节id查询小节表，如果查询数据，不进行删除
+        QueryWrapper<EduVideo> QueryWrapper = new QueryWrapper<>();
+        QueryWrapper.eq("chapter_id", chapterId);
+        int count = eduVideoService.count(QueryWrapper);
+        //判断
+        if (count > 0) {//能查询出来小节,不进行删除
+            throw new GuliException(20001, "不能删除");
+        } else { //没有查询到数据，进行删除
+            //删除章节
+            int result = baseMapper.deleteById(chapterId);
+            return result > 0;
+        }
+    }
+
 }
