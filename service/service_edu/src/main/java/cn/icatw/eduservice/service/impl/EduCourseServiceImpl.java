@@ -35,6 +35,7 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         EduCourse eduCourse = new EduCourse();
         BeanUtils.copyProperties(courseInfoVo, eduCourse);
         String[] subjectIds = courseInfoVo.getSubjectIds();
+        //饿了么级联，数组传值，第一个为父id，第二个为子id
         eduCourse.setSubjectParentId(subjectIds[0]);
         eduCourse.setSubjectId(subjectIds[1]);
         int insert = baseMapper.insert(eduCourse);
@@ -57,5 +58,35 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         }
 
         return cid;
+    }
+
+    @Override
+    public CourseInfoVo getCourseInfo(String courseId) {
+        //查询课程表
+        EduCourse eduCourse = baseMapper.selectById(courseId);
+        CourseInfoVo courseInfoVo = new CourseInfoVo();
+        BeanUtils.copyProperties(eduCourse, courseInfoVo);
+        //查询描述表
+        EduCourseDescription courseDescription = courseDescriptionService.getById(courseId);
+        BeanUtils.copyProperties(courseDescription, courseInfoVo);
+        return courseInfoVo;
+    }
+
+    @Override
+    public void updateCourseInfo(CourseInfoVo courseInfoVo) {
+        //修改课程表
+        EduCourse eduCourse = new EduCourse();
+        BeanUtils.copyProperties(courseInfoVo, eduCourse);
+        String[] subjectIds = courseInfoVo.getSubjectIds();
+        eduCourse.setSubjectParentId(subjectIds[0]);
+        eduCourse.setSubjectId(subjectIds[1]);
+        int i = baseMapper.updateById(eduCourse);
+        if (i == 0) {
+            throw new GuliException(20001, "修改课程信息失败");
+
+        }
+        EduCourseDescription courseDescription = new EduCourseDescription();
+        BeanUtils.copyProperties(courseInfoVo, courseDescription);
+        courseDescriptionService.updateById(courseDescription);
     }
 }
