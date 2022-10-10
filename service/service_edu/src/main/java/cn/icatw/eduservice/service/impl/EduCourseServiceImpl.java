@@ -143,6 +143,7 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
     @Override
     public boolean removeCourse(String courseId) {
+
         //根据课程id删除小节
         eduVideoService.removeVideoByCourseId(courseId);
         //根据课程id删除章节
@@ -151,10 +152,11 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         courseDescriptionService.removeById(courseId);
         //根据课程id删除课程本身
         int i = baseMapper.deleteById(courseId);
-        if (i == 0) {
-            throw new GuliException(20001, "删除失败");
+        if(i==0){
+            throw new GuliException(20001,"删除失败");
         }
         return true;
     }
+
 
 }

@@ -3,9 +3,11 @@ package cn.icatw.eduservice.controller;
 
 import cn.icatw.commonutils.R;
 import cn.icatw.eduservice.entity.EduVideo;
+import cn.icatw.eduservice.feignclient.VodClient;
 import cn.icatw.eduservice.service.EduVideoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class EduVideoController {
     @Autowired
     private EduVideoService videoService;
+    @Autowired
+    private VodClient vodClient;
 
     //添加小节
     @ApiOperation(value = "新增课时")
@@ -56,12 +60,19 @@ public class EduVideoController {
             return R.error();
         }
     }
-    //删除小节
+
     @PostMapping("{id}")
     @ApiOperation(value = "根据ID删除课时")
     @ApiParam(name = "id", value = "课时ID", required = true)
     public R deleteVideo(@PathVariable String id) {
-        //TODO 删除小节的时候把视频也删掉
+        //根据小节id获取视频id，调用方法实现视频删除
+        EduVideo eduVideo = videoService.getById(id);
+        String videoSourceId = eduVideo.getVideoSourceId();
+        //判断小节里面是否有视频id
+        if (!StringUtils.isEmpty(videoSourceId)) {
+            vodClient.removeAlyVideo(videoSourceId);
+        }
+
         boolean b = videoService.removeById(id);
         if (b) {
             return R.ok();
@@ -69,6 +80,7 @@ public class EduVideoController {
             return R.error();
         }
     }
+
 
 }
 

@@ -3,15 +3,20 @@ package cn.icatw.vodservice.service.impl;
 import cn.icatw.baseservice.exception.GuliException;
 import cn.icatw.vodservice.constant.AliConstant;
 import cn.icatw.vodservice.service.VodService;
+import cn.icatw.vodservice.utils.InitVodClient;
 import com.aliyun.vod.upload.impl.UploadVideoImpl;
 import com.aliyun.vod.upload.req.UploadStreamRequest;
 import com.aliyun.vod.upload.resp.UploadStreamResponse;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author icatw
@@ -57,4 +62,23 @@ public class VodServiceImpl implements VodService {
             throw new GuliException(999, "视频上传失败！");
         }
     }
+
+    @Override
+    public void removeMoreAlyVideo(List videoIdList) {
+        try {
+            //初始化对象
+            DefaultAcsClient client = InitVodClient.initVodClient(aliConstant.getKeyId(), aliConstant.getKeySecret());
+            //创建删除视频的request对象
+            DeleteVideoRequest request=new DeleteVideoRequest();
+            //向request设置删除的视频id
+            String ids = StringUtils.join(videoIdList.toArray(), ",");
+            request.setVideoIds(ids);
+            client.getAcsResponse(request);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new GuliException(20001,"删除视频失败");
+        }
+    }
+
 }
