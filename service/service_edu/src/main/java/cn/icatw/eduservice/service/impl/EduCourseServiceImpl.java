@@ -82,7 +82,9 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         courseInfoVo.setSubjectIds(strings);
         //查询描述表
         EduCourseDescription courseDescription = courseDescriptionService.getById(courseId);
-        BeanUtils.copyProperties(courseDescription, courseInfoVo);
+        if (courseDescription != null) {
+            BeanUtils.copyProperties(courseDescription, courseInfoVo);
+        }
         return courseInfoVo;
     }
 
@@ -152,8 +154,8 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         courseDescriptionService.removeById(courseId);
         //根据课程id删除课程本身
         int i = baseMapper.deleteById(courseId);
-        if(i==0){
-            throw new GuliException(20001,"删除失败");
+        if (i == 0) {
+            throw new GuliException(20001, "删除失败");
         }
         return true;
     }
