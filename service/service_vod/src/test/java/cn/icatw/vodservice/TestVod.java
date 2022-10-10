@@ -25,7 +25,7 @@ public class TestVod {
     private static void getVideoInfo() throws com.aliyuncs.exceptions.ClientException {
         //根据视频id获取视频播放地址
         //创建初始化对象
-        DefaultAcsClient client =InitObject.initVodClient("LTAI5t9ijEX8ZekqyRJAn2xr", "sQe0ZMetpW65VnS9dSB9zgYUeYuArU");
+        DefaultAcsClient client = InitVodClient.initVodClient("LTAI5t9ijEX8ZekqyRJAn2xr", "sQe0ZMetpW65VnS9dSB9zgYUeYuArU");
         GetPlayInfoResponse response = new GetPlayInfoResponse();
         GetPlayInfoRequest request=new GetPlayInfoRequest();
         //向request对象里面设置视频id
