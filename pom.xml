@@ -74,18 +74,18 @@
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
             </dependency>
-<!--            &lt;!&ndash;swagger&ndash;&gt;-->
-<!--            <dependency>-->
-<!--                <groupId>io.springfox</groupId>-->
-<!--                <artifactId>springfox-swagger2</artifactId>-->
-<!--                <version>${swagger.version}</version>-->
-<!--            </dependency>-->
-<!--            &lt;!&ndash;swagger ui&ndash;&gt;-->
-<!--            <dependency>-->
-<!--                <groupId>io.springfox</groupId>-->
-<!--                <artifactId>springfox-swagger-ui</artifactId>-->
-<!--                <version>${swagger.version}</version>-->
-<!--            </dependency>-->
+            <!--            &lt;!&ndash;swagger&ndash;&gt;-->
+            <!--            <dependency>-->
+            <!--                <groupId>io.springfox</groupId>-->
+            <!--                <artifactId>springfox-swagger2</artifactId>-->
+            <!--                <version>${swagger.version}</version>-->
+            <!--            </dependency>-->
+            <!--            &lt;!&ndash;swagger ui&ndash;&gt;-->
+            <!--            <dependency>-->
+            <!--                <groupId>io.springfox</groupId>-->
+            <!--                <artifactId>springfox-swagger-ui</artifactId>-->
+            <!--                <version>${swagger.version}</version>-->
+            <!--            </dependency>-->
 
             <!--引入Knife4j的官方start包,Swagger2基于Springfox2.10.5项目-->
             <dependency>
@@ -195,6 +195,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -202,6 +203,16 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <!-- 项目打包时会将java目录中的*.xml文件也进行打包 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>

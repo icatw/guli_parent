@@ -24,9 +24,9 @@ spring:
 server:
   port: 8001
 mybatis-plus:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath:com/atguigu/service/*/mapper/*.xml
+  #  configuration:
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:cn/icatw/eduservice/mapper/xml/*.xml
   global-config:
     db-config:
       logic-delete-value: 1

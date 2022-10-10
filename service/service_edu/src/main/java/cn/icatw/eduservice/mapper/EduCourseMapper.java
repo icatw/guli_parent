@@ -1,6 +1,7 @@
 package cn.icatw.eduservice.mapper;
 
 import cn.icatw.eduservice.entity.EduCourse;
+import cn.icatw.eduservice.entity.vo.CoursePublishVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -13,4 +14,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface EduCourseMapper extends BaseMapper<EduCourse> {
 
+    /**
+     * 获得发布课程信息
+     *
+     * @param id id
+     * @return {@link CoursePublishVo}
+     */
+    CoursePublishVo getPublishCourseInfo(String id);
 }

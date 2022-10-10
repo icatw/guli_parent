@@ -4,10 +4,17 @@ import cn.icatw.baseservice.exception.GuliException;
 import cn.icatw.eduservice.entity.EduCourse;
 import cn.icatw.eduservice.entity.EduCourseDescription;
 import cn.icatw.eduservice.entity.vo.CourseInfoVo;
+import cn.icatw.eduservice.entity.vo.CoursePublishVo;
+import cn.icatw.eduservice.entity.vo.CourseQueryVo;
 import cn.icatw.eduservice.mapper.EduCourseMapper;
+import cn.icatw.eduservice.service.EduChapterService;
 import cn.icatw.eduservice.service.EduCourseDescriptionService;
 import cn.icatw.eduservice.service.EduCourseService;
+import cn.icatw.eduservice.service.EduVideoService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +33,10 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
     @Autowired
     EduCourseDescriptionService courseDescriptionService;
+    @Autowired
+    EduVideoService eduVideoService;
+    @Autowired
+    EduChapterService eduChapterService;
 
     @Transactional
     @Override
@@ -66,8 +77,8 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         CourseInfoVo courseInfoVo = new CourseInfoVo();
         BeanUtils.copyProperties(eduCourse, courseInfoVo);
         String[] strings = new String[2];
-        strings[0]=eduCourse.getSubjectParentId();
-        strings[1]=eduCourse.getSubjectId();
+        strings[0] = eduCourse.getSubjectParentId();
+        strings[1] = eduCourse.getSubjectId();
         courseInfoVo.setSubjectIds(strings);
         //查询描述表
         EduCourseDescription courseDescription = courseDescriptionService.getById(courseId);
@@ -92,4 +103,58 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         BeanUtils.copyProperties(courseInfoVo, courseDescription);
         courseDescriptionService.updateById(courseDescription);
     }
+
+    @Override
+    public CoursePublishVo publishCourseInfo(String id) {
+        return baseMapper.getPublishCourseInfo(id);
+    }
+
+    @Override
+    public void pageQuery(Page<EduCourse> eduCoursePage, CourseQueryVo courseQuery) {
+        QueryWrapper<EduCourse> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("gmt_create");
+        if (courseQuery == null) {
+            this.page(eduCoursePage, queryWrapper);
+            return;
+        }
+        String title = courseQuery.getTitle();
+        String teacherId = courseQuery.getTeacherId();
+        String subjectId = courseQuery.getSubjectId();
+        String subjectParentId = courseQuery.getSubjectParentId();
+        String status = courseQuery.getStatus();
+
+        if (!StringUtils.isEmpty(title)) {
+            queryWrapper.like("title", title);
+        }
+        if (!StringUtils.isEmpty(teacherId)) {
+            queryWrapper.eq("teacher_id", teacherId);
+        }
+        if (!StringUtils.isEmpty(status)) {
+            queryWrapper.eq("status", status);
+        }
+        if (!StringUtils.isEmpty(subjectId)) {
+            queryWrapper.eq("subject_id", subjectId);
+        }
+        if (!StringUtils.isEmpty(subjectParentId)) {
+            queryWrapper.eq("subject_parent_id", subjectParentId);
+        }
+        this.page(eduCoursePage, queryWrapper);
+    }
+
+    @Override
+    public boolean removeCourse(String courseId) {
+        //根据课程id删除小节
+        eduVideoService.removeVideoByCourseId(courseId);
+        //根据课程id删除章节
+        eduChapterService.removeChapterByCourseId(courseId);
+        //根据课程id删除描述
+        courseDescriptionService.removeById(courseId);
+        //根据课程id删除课程本身
+        int i = baseMapper.deleteById(courseId);
+        if (i == 0) {
+            throw new GuliException(20001, "删除失败");
+        }
+        return true;
+    }
+
 }
