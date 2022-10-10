@@ -18,7 +18,7 @@ import java.util.List;
  * @PathVariable注解一定要指定参数名称，否则出错
  * @Component注解防止，在其他位置注入CodClient时idea报错
  */
-@FeignClient("service-vod")
+@FeignClient(name = "service-vod", fallback = VodFileDegradeFeignClient.class)
 @Component
 public interface VodClient {
     /**

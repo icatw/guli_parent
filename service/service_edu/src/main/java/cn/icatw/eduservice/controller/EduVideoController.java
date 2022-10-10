@@ -1,10 +1,12 @@
 package cn.icatw.eduservice.controller;
 
 
+import cn.icatw.baseservice.exception.GuliException;
 import cn.icatw.commonutils.R;
 import cn.icatw.eduservice.entity.EduVideo;
 import cn.icatw.eduservice.feignclient.VodClient;
 import cn.icatw.eduservice.service.EduVideoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequestMapping("/eduservice/video")
+@Api(tags = "课程视频管理")
 public class EduVideoController {
     @Autowired
     private EduVideoService videoService;
@@ -70,9 +73,11 @@ public class EduVideoController {
         String videoSourceId = eduVideo.getVideoSourceId();
         //判断小节里面是否有视频id
         if (!StringUtils.isEmpty(videoSourceId)) {
-            vodClient.removeAlyVideo(videoSourceId);
+            R r = vodClient.removeAlyVideo(videoSourceId);
+            if (r.getCode() == 20001) {
+                throw new GuliException(20001, "删除视频失败，触发熔断...");
+            }
         }
-
         boolean b = videoService.removeById(id);
         if (b) {
             return R.ok();

@@ -24,6 +24,9 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+feign:
+  hystrix:
+    enabled: true
 #### application-dev.yml
 server:
   port: 8001
