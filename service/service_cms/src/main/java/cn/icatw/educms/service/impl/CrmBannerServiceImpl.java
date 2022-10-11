@@ -5,6 +5,7 @@ import cn.icatw.educms.mapper.CrmBannerMapper;
 import cn.icatw.educms.service.CrmBannerService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CrmBannerServiceImpl extends ServiceImpl<CrmBannerMapper, CrmBanner> implements CrmBannerService {
 
     @Override
+    @Cacheable(value = "banner", key = "'selectIndexList'")
     public List<CrmBanner> selectAllBanner() {
         //根据id进行降序排序，显示排列之后的前两条记录
         QueryWrapper<CrmBanner> queryWrapper = new QueryWrapper<>();
