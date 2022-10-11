@@ -77,13 +77,13 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         //非空判断
         if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(code) || StringUtils.isEmpty(nickname)) {
-            throw new GuliException(20001, "注册失败");
+            throw new GuliException(20001, "参数非法！");
         }
         //判断验证码
         //获取redis验证码
         String redisCode = redisTemplate.opsForValue().get(mobile);
         if (!code.equals(redisCode)) {
-            throw new GuliException(20001, "注册失败");
+            throw new GuliException(20001, "验证码错误！");
         }
 
         //判断手机号是否重复，表里面存在相同手机号不进行添加
@@ -91,7 +91,7 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         wrapper.eq("mobile", mobile);
         Integer count = baseMapper.selectCount(wrapper);
         if (count > 0) {
-            throw new GuliException(20001, "注册失败");
+            throw new GuliException(20001, "该手机号已被使用！");
         }
 
         //数据添加数据库中
