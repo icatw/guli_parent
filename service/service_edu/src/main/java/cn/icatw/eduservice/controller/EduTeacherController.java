@@ -35,7 +35,7 @@ public class EduTeacherController {
     @ApiOperation(value = "分页讲师列表")
     @GetMapping("pageTeacher/{current}/{limit}")
     public R pageList(
-            @ApiParam(name = "page", value = "当前页码", required = true)
+            @ApiParam(name = "current", value = "当前页码", required = true)
             @PathVariable Long current,
             @ApiParam(name = "limit", value = "每页记录数", required = true)
             @PathVariable Long limit) {

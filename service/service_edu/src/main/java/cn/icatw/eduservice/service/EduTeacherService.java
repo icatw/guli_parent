@@ -5,6 +5,8 @@ import cn.icatw.eduservice.entity.vo.TeacherQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  * 讲师 服务类
@@ -22,4 +24,12 @@ public interface EduTeacherService extends IService<EduTeacher> {
      * @param teacherQuery 老师查询
      */
     void pageQuery(Page<EduTeacher> pageParam, TeacherQuery teacherQuery);
+
+    /**
+     * 得到前台教室列表
+     *
+     * @param pageTeacher 页面老师
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    Map<String, Object> getTeacherFrontList(Page<EduTeacher> pageTeacher);
 }
