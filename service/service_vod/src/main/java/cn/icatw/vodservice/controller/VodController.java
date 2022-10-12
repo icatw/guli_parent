@@ -28,7 +28,7 @@ public class VodController {
     @ApiOperation(value = "上传视频到阿里云")
     @PostMapping("uploadAlyiVideo")
     public R uploadAlyiVideo(MultipartFile file) {
-//        返回上传视频id
+        //返回上传视频id
         String videoId = vodService.uploadVideoAly(file);
         return R.ok().data("videoId", videoId);
     }

@@ -3,6 +3,8 @@ package cn.icatw.eduservice.service.impl;
 import cn.icatw.baseservice.exception.GuliException;
 import cn.icatw.eduservice.entity.EduCourse;
 import cn.icatw.eduservice.entity.EduCourseDescription;
+import cn.icatw.eduservice.entity.frontvo.CourseFrontVo;
+import cn.icatw.eduservice.entity.frontvo.CourseWebVo;
 import cn.icatw.eduservice.entity.vo.CourseInfoVo;
 import cn.icatw.eduservice.entity.vo.CoursePublishVo;
 import cn.icatw.eduservice.entity.vo.CourseQueryVo;
@@ -19,6 +21,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -158,6 +164,66 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
             throw new GuliException(20001, "删除失败");
         }
         return true;
+    }
+
+    //1 条件查询带分页查询课程
+    @Override
+    public Map<String, Object> getCourseFrontList(Page<EduCourse> pageParam, CourseFrontVo courseFrontVo) {
+        //2 根据讲师id查询所讲课程
+        QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
+        //判断条件值是否为空，不为空拼接
+        if (!StringUtils.isEmpty(courseFrontVo.getSubjectParentId())) { //一级分类
+            wrapper.eq("subject_parent_id", courseFrontVo.getSubjectParentId());
+        }
+        if (!StringUtils.isEmpty(courseFrontVo.getSubjectId())) { //二级分类
+            wrapper.eq("subject_id", courseFrontVo.getSubjectId());
+        }
+        if (!StringUtils.isEmpty(courseFrontVo.getBuyCountSort())) { //关注度
+            wrapper.orderByDesc("buy_count");
+        }
+        if (!StringUtils.isEmpty(courseFrontVo.getGmtCreateSort())) { //最新
+            wrapper.orderByDesc("gmt_create");
+        }
+
+        if (!StringUtils.isEmpty(courseFrontVo.getPriceSort())) {//价格
+            wrapper.orderByDesc("price");
+        }
+
+        baseMapper.selectPage(pageParam, wrapper);
+
+        List<EduCourse> records = pageParam.getRecords();
+        long current = pageParam.getCurrent();
+        long pages = pageParam.getPages();
+        long size = pageParam.getSize();
+        long total = pageParam.getTotal();
+        boolean hasNext = pageParam.hasNext();//下一页
+        boolean hasPrevious = pageParam.hasPrevious();//上一页
+
+        //把分页数据获取出来，放到map集合
+        Map<String, Object> map = new HashMap<>();
+        map.put("items", records);
+        map.put("current", current);
+        map.put("pages", pages);
+        map.put("size", size);
+        map.put("total", total);
+        map.put("hasNext", hasNext);
+        map.put("hasPrevious", hasPrevious);
+
+        //map返回
+        return map;
+    }
+
+    @Override
+    public CourseWebVo getBaseCourseInfo(String courseId) {
+        this.updatePageViewCount(courseId);
+        return baseMapper.getBaseCourseInfo(courseId);
+    }
+
+    @Override
+    public void updatePageViewCount(String id) {
+        EduCourse course = baseMapper.selectById(id);
+        course.setViewCount(course.getViewCount() + 1);
+        baseMapper.updateById(course);
     }
 
 
