@@ -29,4 +29,10 @@ public interface UcenterMemberService extends IService<UcenterMember> {
      * @param registerVo 注册签证官
      */
     void register(RegisterVo registerVo);
+
+    /**
+     * @param openid
+     * @return {@link UcenterMember}
+     */
+    UcenterMember getOpenIdMember(String openid);
 }

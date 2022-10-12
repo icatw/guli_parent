@@ -103,4 +103,9 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         member.setAvatar("http://qzapp.qlogo.cn/qzapp/101983660/4697C6ECF9F91EBE2FF983A6D03F536D/100");
         baseMapper.insert(member);
     }
+
+    @Override
+    public UcenterMember getOpenIdMember(String openid) {
+        return this.getOne(new QueryWrapper<UcenterMember>().eq("openid", openid));
+    }
 }
