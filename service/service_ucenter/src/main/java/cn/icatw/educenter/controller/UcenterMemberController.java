@@ -59,5 +59,13 @@ public class UcenterMemberController {
         UcenterMember member = memberService.getById(memberId);
         return R.ok().data("userInfo", member);
     }
+
+    //2.评论前先登录，查询用户信息
+    @ApiOperation(value = "评论前先登录，查询用户信息")
+    @PostMapping("/getMemberInfoById/{memberId}")
+    public UcenterMember getMemberInfoById(@PathVariable String memberId) {
+        return memberService.getById(memberId);
+    }
+
 }
 
