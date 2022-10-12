@@ -6,7 +6,10 @@ import cn.icatw.vodservice.constant.AliConstant;
 import cn.icatw.vodservice.service.VodService;
 import cn.icatw.vodservice.utils.InitVodClient;
 import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +63,21 @@ public class VodController {
         return R.ok();
     }
 
+    @GetMapping("get-play-auth/{videoId}")
+    public R getVideoPlayAuth(@PathVariable("videoId") String videoId) {
+        try {
+            DefaultAcsClient client = InitVodClient.initVodClient(aliConstant.getKeyId(), aliConstant.getKeySecret());
+            //请求
+            GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+            request.setVideoId(videoId);
+            //响应
+            GetVideoPlayAuthResponse response = client.getAcsResponse(request);
+            //得到播放凭证
+            String playAuth = response.getPlayAuth();
+            //返回结果
+            return R.ok().message("获取凭证成功").data("playAuth", playAuth);
+        } catch (ClientException e) {
+            throw new GuliException(20001, "获取视频凭证失败！");
+        }
+    }
 }
