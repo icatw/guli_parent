@@ -2,12 +2,14 @@ package cn.icatw.educenter.controller;
 
 
 import cn.icatw.commonutils.R;
+import cn.icatw.commonutils.ordervo.UcenterMemberOrder;
 import cn.icatw.educenter.entity.UcenterMember;
 import cn.icatw.educenter.entity.vo.LoginVo;
 import cn.icatw.educenter.entity.vo.RegisterVo;
 import cn.icatw.educenter.service.UcenterMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import utils.JwtUtils;
@@ -65,6 +67,17 @@ public class UcenterMemberController {
     @PostMapping("/getMemberInfoById/{memberId}")
     public UcenterMember getMemberInfoById(@PathVariable String memberId) {
         return memberService.getById(memberId);
+    }
+
+    //根据用户id获取用户信息
+    @ApiOperation(value = "根据用户id获取用户信息，供订单服务远程调用")
+    @PostMapping("getUserInfoOrder/{id}")
+    public UcenterMemberOrder getUserInfoOrder(@PathVariable String id) {
+        UcenterMember member = memberService.getById(id);
+        //把member对象里面值复制给UcenterMemberOrder对象
+        UcenterMemberOrder ucenterMemberOrder = new UcenterMemberOrder();
+        BeanUtils.copyProperties(member, ucenterMemberOrder);
+        return ucenterMemberOrder;
     }
 
 }

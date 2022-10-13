@@ -1,6 +1,7 @@
 package cn.icatw.eduservice.controller.front;
 
 import cn.icatw.commonutils.R;
+import cn.icatw.commonutils.ordervo.CourseWebVoOrder;
 import cn.icatw.eduservice.entity.EduCourse;
 import cn.icatw.eduservice.entity.chapter.ChapterVo;
 import cn.icatw.eduservice.entity.frontvo.CourseFrontVo;
@@ -10,6 +11,7 @@ import cn.icatw.eduservice.service.EduCourseService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +52,15 @@ public class CourseFrontController {
         List<ChapterVo> chapterVideoList = chapterService.getChapterVideoByCourseId(courseId);
 
         return R.ok().data("courseWebVo", courseWebVo).data("chapterVideoList", chapterVideoList);
+    }
+
+    @ApiOperation(value = "根据课程id查询课程信息，供订单服务远程调用")
+    @GetMapping("getCourseInfoOrder/{id}")
+    public CourseWebVoOrder getCourseInfoOrder(@PathVariable String id) {
+        CourseWebVo courseInfo = courseService.getBaseCourseInfo(id);
+        CourseWebVoOrder courseWebVoOrder = new CourseWebVoOrder();
+        BeanUtils.copyProperties(courseInfo, courseWebVoOrder);
+        return courseWebVoOrder;
     }
 }
 

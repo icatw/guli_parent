@@ -1,9 +1,17 @@
 package cn.icatw.orderservice.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import cn.icatw.commonutils.R;
+import cn.icatw.orderservice.entity.TOrder;
+import cn.icatw.orderservice.service.TOrderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import utils.JwtUtils;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -15,7 +23,28 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/orderservice/order")
+@Api(tags = "订单服务")
+@CrossOrigin
 public class TOrderController {
+    @Autowired
+    private TOrderService orderService;
 
+    //根据课程id和用户id创建订单，返回订单id
+    @ApiOperation(value = "根据课程id和用户id创建订单，返回订单id")
+    @PostMapping("createOrder/{courseId}")
+    public R save(@PathVariable String courseId, HttpServletRequest request) {
+        String orderId = orderService.saveOrder(courseId,
+                JwtUtils.getMemberIdByJwtToken(request));
+        return R.ok().data("orderId", orderId);
+    }
+
+    @GetMapping("getOrder/{orderId}")
+    @ApiOperation(value = "根据订单号获取订单详情")
+    public R get(@PathVariable String orderId) {
+        QueryWrapper<TOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq("order_no", orderId);
+        TOrder order = orderService.getOne(wrapper);
+        return R.ok().data("item", order);
+    }
 }
 
