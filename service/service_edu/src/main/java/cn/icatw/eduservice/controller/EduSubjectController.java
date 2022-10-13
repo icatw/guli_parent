@@ -18,7 +18,7 @@ import java.util.List;
  * @apiNote
  */
 @Api(tags = "课程分类管理")
-@CrossOrigin //跨域
+ //跨域
 @RestController
 @RequestMapping("/eduservice/subject")
 public class EduSubjectController {

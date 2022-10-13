@@ -19,7 +19,7 @@ import java.util.Map;
  * @since 2022-10-13
  */
 @RestController
-@CrossOrigin
+
 @Api(tags = "支付日志模块")
 @RequestMapping("/orderservice/paylog")
 public class TPayLogController {

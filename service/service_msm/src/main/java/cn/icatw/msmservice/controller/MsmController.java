@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@CrossOrigin
+
 @Api(tags = "短信服务")
 @RequestMapping("/edumsm/msm")
 public class MsmController {

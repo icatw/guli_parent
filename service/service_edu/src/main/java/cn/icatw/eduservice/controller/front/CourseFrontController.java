@@ -25,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/eduservice/coursefront")
 @Api(tags = "前台课程模块")
-@CrossOrigin
+
 public class CourseFrontController {
 
     @Autowired

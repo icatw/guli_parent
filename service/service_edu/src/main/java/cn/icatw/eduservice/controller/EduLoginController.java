@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * @apiNote
  */
 @RestController
-@CrossOrigin
+
 @RequestMapping("/eduservice/user")
 public class EduLoginController {
     @PostMapping("login")

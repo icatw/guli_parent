@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/eduoss/fileoss")
-@CrossOrigin
 @Api(tags = "阿里云文件管理")
 public class OssController {
     @Autowired

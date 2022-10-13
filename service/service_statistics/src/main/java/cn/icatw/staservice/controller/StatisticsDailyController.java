@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/staservice/sta")
 @Api(tags = "统计管理")
-@CrossOrigin
+
 public class StatisticsDailyController {
     @Autowired
     private StatisticsDailyService staService;

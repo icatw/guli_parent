@@ -28,7 +28,7 @@ import java.util.Objects;
  * @apiNote
  */
 @Controller
-@CrossOrigin
+
 @RequestMapping("/api/ucenter/gitee")
 @Slf4j
 public class GiteeApiController {

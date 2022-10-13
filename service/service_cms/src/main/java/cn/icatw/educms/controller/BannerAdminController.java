@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/cmsservice/banneradmin")
 @Api(tags = "后台banner管理模块")
-@CrossOrigin
 public class BannerAdminController {
 
     @Autowired

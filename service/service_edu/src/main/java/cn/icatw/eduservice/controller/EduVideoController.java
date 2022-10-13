@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-09-27
  */
 @RestController
-@CrossOrigin
+
 @RequestMapping("/eduservice/video")
 @Api(tags = "课程视频管理")
 public class EduVideoController {

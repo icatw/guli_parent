@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/orderservice/order")
 @Api(tags = "订单服务")
-@CrossOrigin
+
 public class TOrderController {
     @Autowired
     private TOrderService orderService;
